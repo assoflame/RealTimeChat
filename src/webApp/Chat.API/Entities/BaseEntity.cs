@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public class User : BaseEntity
+    public abstract class BaseEntity
     {
-        public string Nickname { get; set; }
-        public string PasswordHash { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
     }
 }

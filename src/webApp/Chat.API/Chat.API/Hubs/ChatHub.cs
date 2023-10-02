@@ -1,6 +1,7 @@
 ﻿using Chat.API.Hubs.ChatHelpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Services.Interfaces;
 
 namespace Chat.API.Hubs
 {
@@ -10,15 +11,15 @@ namespace Chat.API.Hubs
         private readonly IServiceManager _serviceManager;
         private readonly IDictionary<string, UserConnection> _connections;
 
-        private readonly string? _userId;
-        private readonly string? _username;
+        private readonly string _userId;
+        private readonly string _username;
 
         public ChatHub(IServiceManager serviceManager, IDictionary<string, UserConnection> connections)
         {
             _serviceManager = serviceManager;
-            _connections = _connections ?? throw new ArgumentException();
-            _userId = Context?.User?.FindFirst("Id")?.Value;
-            _username = Context?.User?.FindFirst("Nickname")?.Value;
+            _connections = connections;
+            _userId = Context?.User?.FindFirst("Id")?.Value ?? throw new ArgumentException();
+            _username = Context?.User?.FindFirst("Nickname")?.Value ?? throw new ArgumentException();
         }
 
         public override Task OnDisconnectedAsync(Exception? exception)
@@ -26,47 +27,48 @@ namespace Chat.API.Hubs
             return base.OnDisconnectedAsync(exception);
         }
 
-        public Task RefreshRoomUsers(string roomName)
+        public async Task SendConnectedUsers(string room)
         {
+            var roomUsers = _connections.Values
+                .Where(connection => connection.RoomName.Equals(room))
+                .Select(connection => connection.Nickname);
 
+            await Clients.Group(room).SendAsync("RecieveRoomUsers", roomUsers);
         }
 
-        public async Task JoinRoom(string roomName)
+        public async Task JoinRoom(string room)
         {
-            if(await _serviceManager.ChatService.UserHasRoomAccess(roomName, _userId))
+            if(await _serviceManager.ChatService.UserHasRoomAccessAsync(room, _username))
             {
-                await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+                await Groups.AddToGroupAsync(Context.ConnectionId, room);
                 _connections.Add(Context.ConnectionId,
-                    new UserConnection { Nickname = _username, RoomName = roomName });
+                    new UserConnection { Nickname = _username, RoomName = room });
             }
         }
 
-        public async Task LeaveRoom(string roomName)
+        public async Task LeaveRoom(string room)
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, room);
             _connections.Add(Context.ConnectionId,
-                new UserConnection { Nickname = _username, RoomName = roomName });
+                new UserConnection { Nickname = _username, RoomName = room });
         }
 
-        public async Task CreateRoom(string roomName)
+        public async Task CreateRoom(string room)
         {
-            _serviceManager.ChatService.TryCreateRoom(roomName, _userId);
+            await _serviceManager.ChatService.TryCreateRoomAsync(room, _userId);
         }
 
-        public async Task SendRoomMessage(string roomName, string message)
+        public async Task SendRoomMessage(string room, string message)
         {
-            if(await _serviceManager.ChatService.UserHasRoomAccess(roomName, _userId))
+            if(await _serviceManager.ChatService.UserHasRoomAccessAsync(room, _userId))
             {
-                await Clients.Group(roomName).SendAsync("RecieveMessage", message);
+                await Clients.Group(room).SendAsync("RecieveMessage", message);
             }
         }
 
-        public async Task BlockRoomUser(string roomName, string userName)
+        public async Task BlockRoomUser(string room, string userName)
         {
-            if(await _serviceManager.ChatService.UserHasRoomAdminRights(roomName, _userId))
-            {
-                await _serviceManager.ChatService.BlockUser(roomName, userName);
-            }
+            await _serviceManager.ChatService.BlockUserAsync(room, _username, userName);
         }
     }
 }

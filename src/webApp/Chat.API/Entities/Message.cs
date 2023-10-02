@@ -8,12 +8,9 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public class Message
+    public class Message : BaseEntity
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
-        public string SenderId { get; set; }
+        public string SenderName { get; set; }
         public string Body { get; set; }
         public DateTime CreatedAt { get; set; }
     }

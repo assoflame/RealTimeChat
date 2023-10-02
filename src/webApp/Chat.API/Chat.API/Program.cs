@@ -1,9 +1,13 @@
+using Chat.API.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-
-
+builder.Services.ConfigureDatabase();
+builder.Services.ConfigureRepoManager();
+builder.Services.ConfigureServiceManager();
+builder.Services.ConfigureConnectionsCollection();
 
 
 var app = builder.Build();
@@ -23,6 +27,5 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 
 app.Run();
