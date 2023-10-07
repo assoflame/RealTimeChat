@@ -64,7 +64,7 @@ namespace Services
                     audience: "validAudience",
                     claims: claims,
                     expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
-                    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("key")), SecurityAlgorithms.HmacSha256)
+                    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SECRETKEY1234567SECRETKEY1234567")), SecurityAlgorithms.HmacSha256)
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
@@ -75,7 +75,10 @@ namespace Services
             var claims = new List<Claim>();
 
             if (_user is not null)
+            {
                 claims.Add(new Claim("Nickname", _user.Nickname));
+                claims.Add(new Claim("Id", _user.Id));
+            }
 
             return claims;
         }

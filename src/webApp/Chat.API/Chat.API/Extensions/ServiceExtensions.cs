@@ -13,7 +13,7 @@ namespace Chat.API.Extensions
     public static class ServiceExtensions
     {
         public static void ConfigureConnectionsCollection(this IServiceCollection services)
-            => services.AddSingleton<IDictionary<string, UserConnection>, Dictionary<string, UserConnection>>();
+            => services.AddSingleton<IDictionary<string, UserConnection>>(new Dictionary<string, UserConnection>());
 
         public static void ConfigureDatabase(this IServiceCollection services)
             => services.AddSingleton<IMongoDatabase>(
@@ -27,7 +27,11 @@ namespace Chat.API.Extensions
             => services.AddSingleton<IRepoManager, RepoManager>();
 
         public static void ConfigureJWT(this IServiceCollection services)
-            => services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            => services.AddAuthentication(opts =>
+            {
+                opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                 .AddJwtBearer(opts =>
                 {
                     opts.TokenValidationParameters = new TokenValidationParameters
@@ -37,10 +41,41 @@ namespace Chat.API.Extensions
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
 
+                        ClockSkew = TimeSpan.Zero,
                         ValidIssuer = "validIssuer",
                         ValidAudience = "validAudience",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("key"))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SECRETKEY1234567SECRETKEY1234567"))
+                    };
+
+                    opts.Events = new JwtBearerEvents()
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) &&
+                                (path.StartsWithSegments("/hubs/chat")))
+                            {
+                                // Read the token out of the query string
+                                context.Token = accessToken;
+                            }
+
+                            return Task.CompletedTask;
+                        }
                     };
                 });
+
+        public static void ConfigureCors(this IServiceCollection services)
+            => services.AddCors(opts =>
+            {
+                opts.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
     }
 }

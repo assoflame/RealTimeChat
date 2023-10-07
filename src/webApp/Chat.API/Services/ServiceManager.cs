@@ -1,4 +1,6 @@
-﻿using Services.Interfaces;
+﻿using DataAccess.Interfaces;
+using MongoDB.Driver;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +14,10 @@ namespace Services
         private readonly Lazy<IChatService> _chatService;
         private readonly Lazy<IAuthService> _authService;
 
-        public ServiceManager(/*IMongoDatabase db*/)
+        public ServiceManager(IRepoManager repoManager)
         {
-            _chatService = new Lazy<IChatService>(() => new ChatService(db));
-            _authService = new Lazy<IAuthService>(() => new AuthService(db));
+            _chatService = new Lazy<IChatService>(() => new ChatService(repoManager));
+            _authService = new Lazy<IAuthService>(() => new AuthService(repoManager));
         }
 
         public IChatService ChatService => _chatService.Value;
