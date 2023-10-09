@@ -15,5 +15,6 @@ namespace Services.Interfaces
         Task<IEnumerable<Room>> GetRooms();
         Task<IEnumerable<Message>> GetRoomMessages(string room);
         Task SendMessageAsync(string room, string message, string username);
+        Task<bool> UserHasRoomAdminRightsAsync(string roomName, string username);
     }
 }

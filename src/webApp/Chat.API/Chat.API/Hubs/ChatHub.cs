@@ -12,8 +12,10 @@ namespace Chat.API.Hubs
         private readonly IServiceManager _serviceManager;
         private readonly IDictionary<string, UserConnection> _connections;
 
-        private string? _userId => Context?.User?.FindFirst("Id")?.Value ?? throw new ArgumentException();
-        private string _username => Context?.User?.FindFirst("Nickname")?.Value ?? throw new ArgumentException();
+        private string _userId => Context?.User?.FindFirst("Id")?.Value
+            ?? throw new ArgumentException();
+        private string _username => Context?.User?.FindFirst("Nickname")?.Value
+            ?? throw new ArgumentException();
 
         public ChatHub(IServiceManager serviceManager, IDictionary<string, UserConnection> connections)
         {
@@ -21,21 +23,20 @@ namespace Chat.API.Hubs
             _connections = connections;
         }
 
-        //public async Task SendMessage(string user, string message)
-        //{
-        //    await Clients.All.SendAsync("ReceiveMessage", user, message);
-        //}
-
-        //public override Task OnDisconnectedAsync(Exception? exception)
-        //{
-        //    return base.OnDisconnectedAsync(exception);
-        //}
+        public async override Task OnDisconnectedAsync(Exception? exception)
+        {
+            var room = _connections[Context.ConnectionId].Room;
+            await RemoveRoomUser(room);
+            await base.OnDisconnectedAsync(exception);
+        }
 
         public async Task SendConnectedUsers(string room)
         {
             var roomUsers = _connections.Values
-                .Where(connection => connection.RoomName.Equals(room))
-                .Select(connection => connection.Nickname);
+                .Where(connection => connection.Room.Equals(room))
+                .Select(connection => connection.Nickname)
+                .Distinct()
+                .ToArray();
 
             await Clients.Group(room).SendAsync("RecieveRoomUsers", roomUsers);
         }
@@ -45,23 +46,35 @@ namespace Chat.API.Hubs
             if(await _serviceManager.ChatService.UserHasRoomAccessAsync(room, _username))
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, room);
-                _connections.TryAdd(Context.ConnectionId,
-                    new UserConnection { Nickname = _username, RoomName = room });
+                if (_connections.Values
+                    .Where(uc => uc.Nickname.Equals(_username) && uc.Room.Equals(room))
+                    .Count() == 0)
+                    await Clients.Group(room).SendAsync("RecieveMessage", JoinRoomMessage);
 
-                await Clients.Caller.SendAsync("RecieveCurrentRoom", room);
+                _connections.TryAdd(Context.ConnectionId,
+                    new UserConnection { Nickname = _username, Room = room });
+
+                await Clients.Caller.SendAsync("RecieveCurrentRoom",
+                    new
+                    {
+                        Room = room,
+                        AdminRights = await _serviceManager.ChatService.UserHasRoomAdminRightsAsync(room, _username)
+                    });
             }
         }
 
         public async Task LeaveRoom(string room)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, room);
-            _connections.Add(Context.ConnectionId,
-                new UserConnection { Nickname = _username, RoomName = room });
+            await RemoveRoomUser(room);
         }
 
         public async Task CreateRoom(string room)
         {
-            await _serviceManager.ChatService.TryCreateRoomAsync(room, _userId);
+            var createRoomResult = await _serviceManager.ChatService
+                .TryCreateRoomAsync(room, _username);
+
+            await Clients.Caller.SendAsync("RecieveCreateRoomResult", createRoomResult);
         }
 
         public async Task SendRoomMessage(string room, string message)
@@ -99,5 +112,32 @@ namespace Chat.API.Hubs
 
             await Clients.All.SendAsync("RecieveRooms", rooms);
         }
+
+        private async Task RemoveRoomUser(string room)
+        {
+            if(_connections.Values
+                .Where(userConnection => userConnection.Nickname.Equals(_username)
+                                        && userConnection.Room.Equals(room))
+                .Count() == 1)
+            {
+                await Clients.Group(room).SendAsync("RecieveMessage", LeaveRoomMessage);
+            }
+            _connections.Remove(Context.ConnectionId);
+            await SendConnectedUsers(room);
+        }
+
+        private Message JoinRoomMessage => new Message
+        {
+            Body = $"{_username} joined",
+            CreatedAt = DateTime.UtcNow,
+            SenderName = "ChatBot"
+        };
+
+        private Message LeaveRoomMessage => new Message
+        {
+            Body = $"{_username} left the chat",
+            CreatedAt = DateTime.UtcNow,
+            SenderName = "ChatBot"
+        };
     }
 }

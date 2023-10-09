@@ -31,7 +31,7 @@ namespace Services
             if (user is null || room is null)
                 throw new ArgumentException();
 
-            if (await UserHasRoomAdminRightsAsync(roomName, adminName))
+            if (room.Admins.Contains(user.Id))
             {
                 room.BlackList.Append(username);
             }
@@ -71,7 +71,7 @@ namespace Services
             return !room.BlackList.Contains(username);
         }
 
-        private async Task<bool> UserHasRoomAdminRightsAsync(string roomName, string username)
+        public async Task<bool> UserHasRoomAdminRightsAsync(string roomName, string username)
         {
             var room = (await _repoManager.Rooms
                 .FindByConditionAsync(room => room.Name.Equals(roomName)))
