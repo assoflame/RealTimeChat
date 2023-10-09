@@ -11,7 +11,10 @@ export const signIn = async (nickname, password) => {
       let result = await response.json();
       // document.cookie = `accessToken=${result.accessToken}; expires=${result.expiresIn}`;
       document.cookie = `accessToken=${result.accessToken}`;
-      console.log(document.cookie);
+      localStorage.setItem('nickname', nickname);
+
+      console.log(localStorage.getItem('nickname'));
+      // console.log(document.cookie);
     } else {
       console.log("error");
     }
@@ -27,9 +30,21 @@ export const signIn = async (nickname, password) => {
     });
 
     if(response.ok){
-      let result = await response.json();
-      console.log(JSON.stringify(result));
+      // let result = await response.json();
+      // console.log(JSON.stringify(result));
     } else {
       console.log("error");
     }
+  }
+
+  export const getAccesToken = () => {
+    let cookies = document.cookie.split('; ');
+    for (let i = 0; i < cookies.length; ++i)
+    {
+      if(cookies[i].startsWith('accessToken')) {
+        console.log(cookies[i].split('=')[1]);
+        return cookies[i].split('=')[1];
+      }
+    }
+    return '';
   }
