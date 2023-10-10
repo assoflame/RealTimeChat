@@ -8,9 +8,11 @@ import Chat from './components/Chat';
 const App = () => {
   return (
     <div>
-      <Link to={'auth/signin'}>Sign In</Link>
-      <Link to={'auth/signup'}>Sign Up</Link>
-      <Link to={'chat'}>Chat</Link>
+      <header>
+        <Link className='menuLink' to={'auth/signin'}>Sign In</Link>
+        <Link className='menuLink' to={'chat'}>Chat</Link>
+        <Link className='menuLink' to={'auth/signup'}>Sign Up</Link>
+      </header>
         <Routes>
           <Route path='/auth/signin' element={<AuthForm actionName={'Sign in'} action={signIn}/>}/>
           <Route path='/auth/signup' element={<AuthForm actionName={'Sign up'} action={signUp}/>}/>

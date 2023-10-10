@@ -48,3 +48,8 @@ export const signIn = async (nickname, password) => {
     }
     return '';
   }
+
+  export const logout = () => {
+    localStorage.removeItem('nickname');
+    
+  }

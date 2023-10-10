@@ -3,6 +3,7 @@ import { HubConnectionBuilder, LogLevel} from "@microsoft/signalr";
 import RoomsList from "./RoomsList";
 import Room from "./Room";
 import { getAccesToken } from "../helpers/Auth";
+import '../styles/App.css'
 
 const Chat = () => {
     const [connection, setConnection] = useState({});
@@ -46,6 +47,10 @@ const Chat = () => {
             setRoomUsers([...users]);
         })
 
+        connection.on("RecieveCreateRoomResult", (result) => {
+            alert('This room already exists');
+        })
+
         await connection.start();
         await connection.invoke('GetRooms');
 
@@ -70,19 +75,21 @@ const Chat = () => {
 
     const blockUser = async (username) => {
         await connection.invoke("BlockRoomUser", currentRoom, username);
-    } 
+    }
+
+    const searchRoom = (roomName) => {
+        setRooms(rooms.filter(room => room.name.startsWith(roomName)));
+    }
 
     return (
-        <div>
-        <RoomsList rooms={rooms} createRoom={createRoom} joinRoom={joinRoom} key={rooms.length}/>
-        {
-            currentRoom !== ''
-            ?   <div>
-                    <div style={{fontWeight:'bold', fontSize:'27px'}}>{currentRoom}</div>
-                    <Room room={currentRoom} messages={roomMessages} sendMessage={sendMessage} roomUsers={roomUsers} adminRights={adminRights} blockUser={blockUser}/>
-                </div>
-            : <div>Select room</div>
-        }
+        <div className='chat'>
+            <RoomsList rooms={rooms} createRoom={createRoom} joinRoom={joinRoom} searchRoom={searchRoom} key={rooms.length}/>
+            {
+                currentRoom !== ''
+                && <Room id='room' room={currentRoom} messages={roomMessages}
+                sendMessage={sendMessage} roomUsers={roomUsers}
+                adminRights={adminRights} blockUser={blockUser}/>
+            }
         </div>
     );
 }
