@@ -105,17 +105,29 @@ header {
     margin-right: auto;
     flex-direction: row;
     margin: 0 auto;
-    justify-content: center;
-    margin-top: 5%;
+    justify-content: space-around;
+    margin-top: 1%;
     width: 100%;
 }
 
 /* ___________________________________________________________________________________ */
 
+#roomsPanel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 15%;
+}
+
 #roomsList {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 70%;
+    
+    max-height: 615px;
+    padding-right: 3px;
+    overflow-y: scroll;
 }
 
 .roomLink {
@@ -152,7 +164,6 @@ header {
 
 #createRoomButton:hover {
     color: #F4EEE0;
-    /* border: 2px solid #393646; */
     background-color: #393646;
     transition: 0.2s;
 }
@@ -177,21 +188,23 @@ header {
 #room {
     display: flex;
     flex-direction: row;
-    margin-left: 5%;
+    width: 70%;
+    justify-content: space-between;
 }
 
 #currentRoomName {
     text-align: center;
     font-weight: 600;
     font-size: 23px;
+
+    border-bottom: 2px solid #393646;
 }
 
 #roomMain {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    min-width: 700px;
+    width: 70%;
 }
 
 #currentRoomName {
@@ -209,18 +222,26 @@ header {
     width: 100%;
     margin-bottom: 3%;
     font-size: 16px;
+    max-height: 500px;
+
+    overflow-y: scroll;
 }
 
 .someoneMessage {
     text-align: left;
     align-self: flex-start;
     margin-bottom: 1%;
+    
+    max-width: 50%;
 }
 
 .ownMessage {
     text-align: right;
     align-self: flex-end;
     margin-bottom: 1%;
+    margin-right: 2px;
+    
+    max-width: 50%;
 }
 
 .ownMessageBody {
@@ -228,6 +249,8 @@ header {
     color: #F4EEE0;
     border-radius: 10px 15px 0px 15px;
     padding: 10px;
+    
+    word-wrap: break-word;
 }
 
 .someoneMessageBody {
@@ -235,14 +258,16 @@ header {
     border: #393646 2px solid;
     border-radius: 15px 10px 15px 0px;
     padding: 10px;
+
+    word-wrap: break-word;
 }
 
 .ownMessageSender {
-
+    font-weight: 500;
 }
 
 .someoneMessageSender {
-    
+    font-weight: 500;
 }
 
 .sender {
@@ -268,4 +293,68 @@ header {
     text-align: left;
     width: 80%;
     padding: 1%;
+}
+
+
+
+/*___________________________________________________________*/
+
+
+#roomUsers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20%;
+}
+
+#roomUsersTitle {
+    margin-bottom: 3%;
+    font-size: 23px;
+    font-weight: 500;
+    width: 100%;
+    text-align: center;
+}
+
+.roomUser {
+    margin-bottom: 3%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.roomUserName {
+}
+
+.blockUserButton {
+    background-color: #F4EEE0;
+    border: 2px solid #393646;
+    color: #393646;
+    padding: 3%;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 17px;
+}
+
+.blockUserButton:hover {
+    color: #F4EEE0;
+    background-color: #393646;
+    transition: 0.2s;
+}
+
+
+/* * {
+    border: 1px solid green;
+} */
+
+
+/*________________________________*/
+
+::-webkit-scrollbar {
+    background-color: #F4EEE0;
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #393646;
 }

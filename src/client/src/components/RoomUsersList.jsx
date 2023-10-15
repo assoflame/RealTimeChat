@@ -1,11 +1,16 @@
 import React from "react";
 
-const RoomUsersList = ({roomUsers}) => {
+const RoomUsersList = ({roomUsers, adminRights, blockUser}) => {
     return (
-        <div>
-            <div style={{fontWeight:'bold', fontSize:'29px'}}>Users:</div>
-            {
-                roomUsers.map((user, index) => <div key={index}>{user}</div>)
+        <div id="roomUsers">
+            <div id="roomUsersTitle">Room users</div>
+            {roomUsers.filter((username) => username !== localStorage.getItem('nickname'))
+                .map((user, index) => {
+                    return  <div key={index} className="roomUser">
+                                <div className="roomUserName">{user}</div>
+                                {adminRights && <button onClick={e => blockUser(user)} className="blockUserButton">Block</button>}
+                            </div>;
+                            })
             }
         </div>
     )

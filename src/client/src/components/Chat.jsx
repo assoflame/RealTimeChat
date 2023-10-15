@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { HubConnectionBuilder, LogLevel} from "@microsoft/signalr";
-import RoomsList from "./RoomsList";
+import RoomsPanel from "./RoomsPanel";
 import Room from "./Room";
-import { getAccesToken } from "../helpers/Auth";
+import { getAccesToken} from "../helpers/Auth";
 import '../styles/App.css'
 
 const Chat = () => {
@@ -48,7 +48,8 @@ const Chat = () => {
         })
 
         connection.on("RecieveCreateRoomResult", (result) => {
-            alert('This room already exists');
+            if(result === false)
+                alert('This room already exists');
         })
 
         await connection.start();
@@ -77,18 +78,14 @@ const Chat = () => {
         await connection.invoke("BlockRoomUser", currentRoom, username);
     }
 
-    const searchRoom = (roomName) => {
-        setRooms(rooms.filter(room => room.name.startsWith(roomName)));
-    }
-
     return (
         <div className='chat'>
-            <RoomsList rooms={rooms} createRoom={createRoom} joinRoom={joinRoom} searchRoom={searchRoom} key={rooms.length}/>
+            <RoomsPanel rooms={rooms} createRoom={createRoom} joinRoom={joinRoom} key={rooms.length}/>
             {
                 currentRoom !== ''
                 && <Room id='room' room={currentRoom} messages={roomMessages}
-                sendMessage={sendMessage} roomUsers={roomUsers}
-                adminRights={adminRights} blockUser={blockUser}/>
+                                    sendMessage={sendMessage} roomUsers={roomUsers}
+                                    adminRights={adminRights} blockUser={blockUser}/>
             }
         </div>
     );

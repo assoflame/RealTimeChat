@@ -1,3 +1,4 @@
+
 export const signIn = async (nickname, password) => {
     let response = await fetch("http://localhost:5285/api/auth/signin", {
       method: "POST",
@@ -9,12 +10,8 @@ export const signIn = async (nickname, password) => {
 
     if(response.ok){
       let result = await response.json();
-      // document.cookie = `accessToken=${result.accessToken}; expires=${result.expiresIn}`;
-      document.cookie = `accessToken=${result.accessToken}`;
+      document.cookie = `accessToken=${result.accessToken}; expires=${new Date(Date.now() + 86400 * 1000).toUTCString()}`;
       localStorage.setItem('nickname', nickname);
-
-      console.log(localStorage.getItem('nickname'));
-      // console.log(document.cookie);
     } else {
       console.log("error");
     }
@@ -30,8 +27,7 @@ export const signIn = async (nickname, password) => {
     });
 
     if(response.ok){
-      // let result = await response.json();
-      // console.log(JSON.stringify(result));
+      await signIn(nickname, password);
     } else {
       console.log("error");
     }
@@ -51,5 +47,11 @@ export const signIn = async (nickname, password) => {
 
   export const logout = () => {
     localStorage.removeItem('nickname');
-    
+    document.cookie = `accessToken= ; expires=${new Date(Date.now()).toUTCString()}`;
+    console.log(document.cookie);
+  }
+
+  export const loggedIn = () => {
+    // let nickname = localStorage.getItem('nickname');
+    return localStorage.getItem('nickname') !== null;
   }
