@@ -476,5 +476,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-
+# file with tasks
 tasks.txt
+
+# file with db scheme
+scheme.drawio
