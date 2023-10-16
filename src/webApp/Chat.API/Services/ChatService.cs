@@ -18,7 +18,7 @@ namespace Services
             _repoManager = repoManager;
         }
 
-        public async Task BlockUserAsync(string roomName, string adminName, string username)
+        public async Task BlockUserAsync(string roomName, string username)
         {
             var user = (await _repoManager.Users
                 .FindByConditionAsync(user => user.Nickname.Equals(username)))
@@ -31,10 +31,9 @@ namespace Services
             if (user is null || room is null)
                 throw new ArgumentException();
 
-            if (room.Admins.Contains(user.Id))
-            {
-                room.BlackList.Append(username);
-            }
+            room.BlackList.Add(username);
+
+            await _repoManager.Rooms.UpdateRoomAsync(roomName, room);
         }
 
         public async Task<bool> TryCreateRoomAsync(string roomName, string username)

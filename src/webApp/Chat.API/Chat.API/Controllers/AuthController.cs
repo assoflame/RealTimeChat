@@ -32,12 +32,7 @@ namespace Chat.API.Controllers
             if (!await _serviceManager.AuthService.ValidateUserAsync(userSignInDto))
                 return Unauthorized();
 
-            return Ok(
-                new
-                {
-                    AccessToken = _serviceManager.AuthService.CreateToken(),
-                    ExpiresIn = DateTime.UtcNow.AddDays(1)
-                });
+            return Ok(new { AccessToken = _serviceManager.AuthService.CreateToken() });
         }
     }
 }

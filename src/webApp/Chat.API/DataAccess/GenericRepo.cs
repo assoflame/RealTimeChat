@@ -12,7 +12,7 @@ namespace DataAccess.Interfaces
     public class GenericRepo<TEntity> : IGenericRepo<TEntity>
         where TEntity : BaseEntity
     {
-        private readonly IMongoCollection<TEntity> _collection;
+        protected IMongoCollection<TEntity> _collection;
 
         public GenericRepo(IMongoCollection<TEntity> collection)
         {

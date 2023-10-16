@@ -11,7 +11,7 @@ namespace Services.Interfaces
     {
         Task<bool> UserHasRoomAccessAsync(string room, string username);
         Task<bool> TryCreateRoomAsync(string room, string username);
-        Task BlockUserAsync(string roomName, string adminName, string username);
+        Task BlockUserAsync(string roomName, string username);
         Task<IEnumerable<Room>> GetRooms();
         Task<IEnumerable<Message>> GetRoomMessages(string room);
         Task SendMessageAsync(string room, string message, string username);
