@@ -67,7 +67,6 @@ const Chat = () => {
         if(currentRoom !== '')
             await connection.invoke("LeaveRoom", currentRoom);
         await connection.invoke("JoinRoom", roomName);
-        await connection.invoke("SendConnectedUsers", roomName);
     }
 
     const sendMessage = async (room, message) => {
