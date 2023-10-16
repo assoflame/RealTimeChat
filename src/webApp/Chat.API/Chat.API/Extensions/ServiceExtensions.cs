@@ -15,9 +15,9 @@ namespace Chat.API.Extensions
         public static void ConfigureConnectionsCollection(this IServiceCollection services)
             => services.AddSingleton<IDictionary<string, UserConnection>>(new Dictionary<string, UserConnection>());
 
-        public static void ConfigureDatabase(this IServiceCollection services)
+        public static void ConfigureDatabase(this IServiceCollection services, IConfiguration configuration)
             => services.AddSingleton<IMongoDatabase>(
-                new MongoClient("mongodb://localhost:27017").GetDatabase("chat")
+                new MongoClient(configuration.GetConnectionString("DefaultConnection")).GetDatabase("chat")
                 );
 
         public static void ConfigureServiceManager(this IServiceCollection services)
@@ -26,8 +26,11 @@ namespace Chat.API.Extensions
         public static void ConfigureRepoManager(this IServiceCollection services)
             => services.AddSingleton<IRepoManager, RepoManager>();
 
-        public static void ConfigureJWT(this IServiceCollection services)
-            => services.AddAuthentication(opts =>
+        public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
+        {
+            var jwtSettings = configuration.GetSection("JwtSettings");
+
+            services.AddAuthentication(opts =>
             {
                 opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -42,9 +45,9 @@ namespace Chat.API.Extensions
                         ValidateIssuerSigningKey = true,
 
                         ClockSkew = TimeSpan.Zero,
-                        ValidIssuer = "validIssuer",
-                        ValidAudience = "validAudience",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SECRETKEY1234567SECRETKEY1234567"))
+                        ValidIssuer = jwtSettings["validIssuer"],
+                        ValidAudience = jwtSettings["validAudience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["secretKey"]))
                     };
 
                     opts.Events = new JwtBearerEvents()
@@ -65,6 +68,7 @@ namespace Chat.API.Extensions
                         }
                     };
                 });
+        }
 
         public static void ConfigureCors(this IServiceCollection services)
             => services.AddCors(opts =>

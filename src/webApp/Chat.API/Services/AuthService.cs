@@ -1,5 +1,6 @@
 ﻿using DataAccess.Interfaces;
 using Entities;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Services.Interfaces;
 using Shared.DataTransferObjects;
@@ -13,11 +14,14 @@ namespace Services
     public class AuthService : IAuthService
     {
         private readonly IRepoManager _repoManager;
+        private readonly IConfiguration _configuration;
+
         private User? _user;
 
-        public AuthService(IRepoManager repoManager)
+        public AuthService(IRepoManager repoManager, IConfiguration configuration)
         {
             _repoManager = repoManager;
+            _configuration = configuration;
         }
 
         public async Task SignUpAsync(SignUpDto signUpDto)
@@ -58,13 +62,16 @@ namespace Services
 
         public string CreateToken()
         {
+            var jwtSettings = _configuration.GetSection("JwtSettings");
+
             var claims = GetClaims();
             var token = new JwtSecurityToken(
-                    issuer: "validIssuer",
-                    audience: "validAudience",
+                    issuer: jwtSettings["validIssuer"],
+                    audience: jwtSettings["validAudience"],
                     claims: claims,
-                    expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
-                    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SECRETKEY1234567SECRETKEY1234567")), SecurityAlgorithms.HmacSha256)
+                    expires: DateTime.UtcNow.Add(TimeSpan.FromDays(int.Parse(jwtSettings["expires"]))),
+                    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["secretKey"])),
+                        SecurityAlgorithms.HmacSha256)
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);

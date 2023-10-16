@@ -5,7 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.ConfigureDatabase();
+var configuration = builder.Configuration;
+
+builder.Services.ConfigureDatabase(configuration);
 
 builder.Services.ConfigureRepoManager();
 
@@ -19,7 +21,7 @@ builder.Services.ConfigureCors();
 
 builder.Services.AddSignalR();
 
-builder.Services.ConfigureJWT();
+builder.Services.ConfigureJWT(configuration);
 
 var app = builder.Build();
 

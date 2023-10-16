@@ -82,12 +82,12 @@ namespace Services
             return room.Admins.Contains(username);
         }
 
-        public async Task<IEnumerable<Room>> GetRooms()
+        public async Task<IEnumerable<Room>> GetRoomsAsync()
         {
             return await _repoManager.Rooms.FindAllAsync();
         }
 
-        public async Task<IEnumerable<Message>> GetRoomMessages(string room)
+        public async Task<IEnumerable<Message>> GetRoomMessagesAsync(string room)
         {
             return await _repoManager.Messages
                 .FindByConditionAsync(message => message.RoomName.Equals(room));

@@ -116,7 +116,7 @@ namespace Chat.API.Hubs
         {
             if(await _serviceManager.ChatService.UserHasRoomAccessAsync(room, _username))
             {
-                var messages = await _serviceManager.ChatService.GetRoomMessages(room);
+                var messages = await _serviceManager.ChatService.GetRoomMessagesAsync(room);
                 await Clients.Caller.SendAsync("RecieveRoomMessages", messages);
             }
         }
@@ -135,7 +135,7 @@ namespace Chat.API.Hubs
 
         public async Task GetRooms()
         {
-            var rooms = await _serviceManager.ChatService.GetRooms();
+            var rooms = await _serviceManager.ChatService.GetRoomsAsync();
 
             await Clients.All.SendAsync("RecieveRooms", rooms);
         }
