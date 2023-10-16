@@ -41,19 +41,11 @@ app.UseCors();
 
 app.UseRouting();
 
-//app.UseEndpoints(
-//    endpoints =>
-//    {
-//        endpoints.MapHub<ChatHub>("hubs/chat");
-//    });
-
 app.MapHub<ChatHub>("hubs/chat");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-
 app.MapControllers();
-
 
 app.Run();
