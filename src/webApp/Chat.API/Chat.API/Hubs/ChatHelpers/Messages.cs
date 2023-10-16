@@ -20,7 +20,7 @@ namespace Chat.API.Hubs.ChatHelpers
 
         public static Message GetBlockUserMessage(string username) => new Message
         {
-            Body = $"{username} were blocked",
+            Body = $"{username} has been blocked",
             CreatedAt = DateTime.UtcNow,
             SenderName = "ChatBot"
         };
