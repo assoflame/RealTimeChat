@@ -3,7 +3,7 @@ import { HubConnectionBuilder, LogLevel} from "@microsoft/signalr";
 import RoomsPanel from "./RoomsPanel";
 import Room from "./Room";
 import { getAccesToken} from "../helpers/Auth";
-import '../styles/App.css'
+import '../styles/Chat.css'
 
 const Chat = () => {
     const [connection, setConnection] = useState({});

@@ -1,5 +1,7 @@
 import React from "react";
 
+import '../styles/RoomUsersList.css'
+
 const RoomUsersList = ({roomUsers, adminRights, blockUser}) => {
     return (
         <div id="roomUsers">

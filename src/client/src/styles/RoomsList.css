@@ -1,0 +1,70 @@
+#roomsPanel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 15%;
+}
+
+#roomsList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 70%;
+    
+    max-height: 615px;
+    padding-right: 3px;
+    overflow-y: scroll;
+}
+
+.roomLink {
+    background-color: #393646;
+    margin-bottom: 5%;
+    text-align: center;
+    width: 100%;
+    font-size: 18px;
+    font-weight: 600;
+    color: #F4EEE0;
+    border-radius: 10px;
+    padding: 2%;
+}
+
+.roomLink:hover {
+    cursor: pointer;
+    opacity: 0.8;
+    transition: 0.2s;
+}
+
+#roomSearch {
+    margin-bottom: 10%;
+}
+
+#createRoomButton {
+    background-color: #F4EEE0;
+    border: 2px solid #393646;
+    color: #393646;
+    padding: 3%;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 17px;
+}
+
+#createRoomButton:hover {
+    color: #F4EEE0;
+    background-color: #393646;
+    transition: 0.2s;
+}
+
+#roomSearch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#roomSearchInput {
+    text-align: center;
+    border-bottom: #393646 2px solid;
+    color: #393646;
+    margin-bottom: 5%;
+    font-weight: 600;
+    font-size: 18px;
+}

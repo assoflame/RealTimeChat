@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import RoomsList from "./RoomsList";
+import '../styles/RoomsList.css'
 
 const RoomsPanel = ({rooms, createRoom, joinRoom}) => {
     const [roomName, setRoomName] = useState('');

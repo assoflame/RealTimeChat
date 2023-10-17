@@ -1,0 +1,110 @@
+
+#room {
+    display: flex;
+    flex-direction: row;
+    width: 70%;
+    justify-content: space-between;
+}
+
+#currentRoomName {
+    text-align: center;
+    font-weight: 600;
+    font-size: 23px;
+
+    border-bottom: 2px solid #393646;
+}
+
+#roomMain {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 70%;
+}
+
+#currentRoomName {
+    text-align: center;
+    color: #393646;
+    margin-bottom: 5%;
+    font-weight: 600;
+    font-size: 30px;
+}
+
+#messages {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 3%;
+    font-size: 16px;
+    max-height: 500px;
+
+    overflow-y: scroll;
+}
+
+.someoneMessage {
+    text-align: left;
+    align-self: flex-start;
+    margin-bottom: 1%;
+    
+    max-width: 50%;
+}
+
+.ownMessage {
+    text-align: right;
+    align-self: flex-end;
+    margin-bottom: 1%;
+    margin-right: 2px;
+    
+    max-width: 50%;
+}
+
+.ownMessageBody {
+    background-color: #393646;
+    color: #F4EEE0;
+    border-radius: 10px 15px 0px 15px;
+    padding: 10px;
+    
+    word-wrap: break-word;
+}
+
+.someoneMessageBody {
+    background-color: #F4EEE0;
+    border: #393646 2px solid;
+    border-radius: 15px 10px 15px 0px;
+    padding: 10px;
+
+    word-wrap: break-word;
+}
+
+.ownMessageSender {
+    font-weight: 500;
+}
+
+.someoneMessageSender {
+    font-weight: 500;
+}
+
+.sender {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+#writeMessagePanel {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+#sendMessageButton {
+    background-color: #393646;
+    color: #F4EEE0;
+    width: 20%;
+    min-height: 60px;
+}
+
+#messageInput {
+    border: 2px solid #393646;
+    text-align: left;
+    width: 80%;
+    padding: 1%;
+}

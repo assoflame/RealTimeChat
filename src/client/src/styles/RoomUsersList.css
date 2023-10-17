@@ -1,0 +1,42 @@
+
+#roomUsers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20%;
+}
+
+#roomUsersTitle {
+    margin-bottom: 3%;
+    font-size: 23px;
+    font-weight: 500;
+    width: 100%;
+    text-align: center;
+}
+
+.roomUser {
+    margin-bottom: 3%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.roomUserName {
+}
+
+.blockUserButton {
+    background-color: #F4EEE0;
+    border: 2px solid #393646;
+    color: #393646;
+    padding: 3%;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 17px;
+}
+
+.blockUserButton:hover {
+    color: #F4EEE0;
+    background-color: #393646;
+    transition: 0.2s;
+}

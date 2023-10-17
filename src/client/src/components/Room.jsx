@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import RoomUsersList from "./RoomUsersList";
-import '../styles/App.css'
+import '../styles/Room.css'
 import Message from "./Message";
 
 const Room = ({room, messages, sendMessage, roomUsers, adminRights, blockUser}) => {
