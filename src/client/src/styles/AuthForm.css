@@ -7,7 +7,7 @@
     align-items: center;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 5%;
+    margin-top: 15%;
 }
 
 .authInput {
@@ -28,9 +28,17 @@
     margin-top: 15%;
 }
 
-.authButton {
+#authButtons {
+    display: flex;
+    width: 100%;
+    background-color: #393646;
     margin-top: 10%;
-    margin-bottom: 15%;
+    margin-bottom: 10%;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.authButton {
     padding: 1% 5%;
     color: #393646;
     font-size: 18px;

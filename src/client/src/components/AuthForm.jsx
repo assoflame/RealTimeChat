@@ -17,20 +17,22 @@ const AuthForm = () => {
                     <input className="authInput" placeholder='nickname' onChange={e => setNickname(e.target.value)}/>
                     <input className="authInput" placeholder='password' type="password" onChange={e => setPassword(e.target.value)}/>
                 </div>
-            <button className="authButton" type="submit"
-                onClick={async () => {
-                        await signIn(nickname, password);
-                        navigate(chatPage, {replace: true});
+                <div id="authButtons">
+                    <button className="authButton" type="submit"
+                                onClick={async () => {
+                                    await signIn(nickname, password);
+                                    navigate(chatPage, {replace: true});
                         }}>
                             Sign In
-            </button>
-            <button className="authButton" type="submit"
-                onClick={async () => {
-                        await signUp(nickname, password);
-                        navigate(chatPage, {replace: true});
+                    </button>
+                    <button className="authButton" type="submit"
+                                onClick={async () => {
+                                    await signUp(nickname, password);
+                                    navigate(chatPage, {replace: true});
                         }}>
                             Sign Up
-            </button>
+                    </button>
+            </div>
         </form>
     )
 }
