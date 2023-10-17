@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using Entities.Models;
 using System.Linq.Expressions;
 
 namespace DataAccess.Interfaces

@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using Entities.Models;
 
 namespace Chat.API.Hubs.ChatHelpers
 {

@@ -1,5 +1,5 @@
 ﻿using DataAccess.Interfaces;
-using Entities;
+using Entities.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Services.Interfaces;

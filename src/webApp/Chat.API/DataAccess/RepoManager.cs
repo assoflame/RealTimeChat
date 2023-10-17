@@ -1,5 +1,5 @@
 ﻿using DataAccess.Interfaces;
-using Entities;
+using Entities.Models;
 using MongoDB.Driver;
 
 namespace DataAccess

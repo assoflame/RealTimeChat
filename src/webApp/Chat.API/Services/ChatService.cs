@@ -1,5 +1,6 @@
 ﻿using DataAccess.Interfaces;
-using Entities;
+using Entities.Models;
+using Entities.Exceptions;
 using Services.Interfaces;
 
 namespace Services
@@ -38,7 +39,7 @@ namespace Services
                 .FirstOrDefault();
 
             if (room is not null)
-                return false; // room already exists
+                return false;
 
             room = new Room()
             {
@@ -60,7 +61,7 @@ namespace Services
                 .FirstOrDefault();
 
             if (room is null)
-                throw new ArgumentException(); // throw not found custom exception
+                throw new RoomNotFoundException(roomName);
 
             return !room.BlackList.Contains(username);
         }
@@ -72,7 +73,7 @@ namespace Services
                 .FirstOrDefault();
 
             if (room is null)
-                throw new ArgumentException(); // throw not found custom exception
+                throw new RoomNotFoundException(roomName);
 
             return room.Admins.Contains(username);
         }

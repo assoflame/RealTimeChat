@@ -1,5 +1,5 @@
 ﻿using Chat.API.Hubs.ChatHelpers;
-using Entities;
+using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Services.Interfaces;

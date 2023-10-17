@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using Entities.Models;
 using MongoDB.Driver;
 using System.Linq.Expressions;
 

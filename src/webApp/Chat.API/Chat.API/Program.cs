@@ -1,5 +1,7 @@
 using Chat.API.Extensions;
 using Chat.API.Hubs;
+using Chat.API.Hubs.HubFilters;
+using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +21,7 @@ builder.Services.AddControllers();
 
 builder.Services.ConfigureCors();
 
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(opts => opts.AddFilter<ExceptionHandlingFilter>());
 
 builder.Services.ConfigureJWT(configuration);
 
