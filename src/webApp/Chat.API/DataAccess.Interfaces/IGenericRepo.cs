@@ -8,7 +8,6 @@ namespace DataAccess.Interfaces
     {
         Task CreateAsync(TEntity entity);
         Task DeleteAsync(Expression<Func<TEntity, bool>> condition);
-        //Task UpdateAsync();
         Task<IEnumerable<TEntity>> FindByConditionAsync(Expression<Func<TEntity, bool>> condition);
         Task<IEnumerable<TEntity>> FindAllAsync();
         Task<TEntity?> FindByIdAsync(string id);
